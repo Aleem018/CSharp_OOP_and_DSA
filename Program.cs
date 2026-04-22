@@ -11,6 +11,14 @@ namespace DsaLearning
             myStack.Push(10);
             myStack.Push(20);
             myStack.Push(30);
+            myStack.Push(40);
+            myStack.Push(50);
+            myStack.Push(60);
+            myStack.Push(70);
+            myStack.Push(80);
+            myStack.Push(90);
+            myStack.Push(100);
+            myStack.Push(110);
 
             myStack.Display();
 
@@ -26,12 +34,24 @@ namespace DsaLearning
         private int[] _items = new int[10];
         private int _top = -1;
 
+        private void Grow()
+        {
+            int[] newArray = new int[_items.Length * 2];
+
+            for (int i = 0; i <= _top; i++)
+            {
+                newArray[i] = _items[i];
+            }
+
+            _items = newArray;
+            Console.WriteLine($"Stack grew to {_items.Length} capacity.");
+        }
+
         public void Push(int data)
         {
             if (_top >=9)
             {
-                Console.WriteLine("Stack Overflow!");
-                return;
+                Grow();
             }
             _items[++_top] = data;
             Console.WriteLine($"Pushed {data} onto the stack.");

@@ -12,3 +12,4 @@ c:\Users\AHMED IKEOLUWA\Desktop\C# OOP'DSA\obj\Debug\net10.0\refint\C# OOP'DSA.d
 c:\Users\AHMED IKEOLUWA\Desktop\C# OOP'DSA\obj\Debug\net10.0\C# OOP'DSA.pdb
 C:\Users\AHMED IKEOLUWA\Desktop\C# OOP'DSA\obj\Debug\net10.0\C# OOP'DSA.genruntimeconfig.cache
 C:\Users\AHMED IKEOLUWA\Desktop\C# OOP'DSA\obj\Debug\net10.0\ref\C# OOP'DSA.dll
+C:\Users\AHMED IKEOLUWA\Desktop\C# OOP'DSA\obj\Debug\net10.0\C# OOP'DSA.sourcelink.json
