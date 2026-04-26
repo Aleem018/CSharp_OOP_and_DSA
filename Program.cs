@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 
 namespace DsaLearning
 {
@@ -6,107 +7,74 @@ namespace DsaLearning
     {
         static void Main(string[] args)
         {
-            SimpleStack myStack = new SimpleStack(2);
+            LinkedList list = new LinkedList();
+            list.AddLast(10);
+            list.AddLast(20);
+            list.AddFirst(30);
 
-            myStack.Push(10);
-            myStack.Push(20);
-            myStack.Push(30);
-            myStack.Push(40);
-            myStack.Push(50);
-            myStack.Push(60);
-            myStack.Push(70);
-            myStack.Push(80);
-            myStack.Push(90);
-            myStack.Push(100);
-            myStack.Push(110);
-
-            myStack.Display();
-
-            Console.WriteLine("Popped: " + myStack.Pop());
-            Console.WriteLine("Popped: " + myStack.Pop());
-
-            Console.WriteLine("Peek: " + myStack.Peek());
-            myStack.Display();
+            list.Display();
         }
     }
+
     // My Custom class
-    public class SimpleStack
+    public class Node
     {
-        private int[] _items = new int[10];
-        private int _top = -1;
+        public int Data;
+        public Node Next;
 
-        // Constructor
-        public SimpleStack(int initialCapacity)
+        public Node(int value)
         {
-            if (initialCapacity < 1)
+            Data = value;
+            Next = null;
+        }
+    }
+
+    public class LinkedList
+    {
+        private Node _head;
+        private Node _tail;
+
+        public void AddLast(int data)
+        {
+            Node newNode = new Node(data);
+
+            // if the list is empty
+            if (_head == null)
             {
-                initialCapacity = 4;
+                _head = newNode;
+                _tail = newNode;
+            } else
+            {
+                _tail.Next = newNode;
+                _tail = newNode;
             }
-            _items =  new int[initialCapacity];
+
+            
         }
 
-        private void Grow()
+        public void AddFirst(int data)
         {
-            int[] newArray = new int[_items.Length * 2];
+            Node newNode = new Node(data); // creating a new node object
+            newNode.Next = _head;
+            _head = newNode;
 
-            for (int i = 0; i <= _top; i++)
+            if (_tail == null)
             {
-                newArray[i] = _items[i];
+                _tail = _head;
             }
-
-            _items = newArray;
-            Console.WriteLine($"Stack grew to {_items.Length} capacity.");
-        }
-
-        public void Push(int data)
-        {
-            if (_top == _items.Length - 1)
-            {
-                Grow();
-            }
-            _items[++_top] = data;
-            Console.WriteLine($"Pushed {data} onto the stack.");
-        }
-
-        public int Pop()
-        {
-            if (IsEmpty())
-            {
-                Console.WriteLine("Stack Underflow!");
-                return -1;
-            }
-            return _items[_top--];
-        }
-
-        public int Peek()
-        {
-            if (IsEmpty())
-            {
-                Console.WriteLine("Stack is empty!");
-                return -1;
-            }
-            return _items[_top];
-        }
-
-        public bool IsEmpty()
-        {
-            return _top < 0;
         }
 
         public void Display()
         {
-            if (IsEmpty())
+            Node current = _head;
+            while (current != null)
             {
-                Console.WriteLine("Stack is empty!");
-                return;
+                Console.WriteLine($"{current.Data} -> ");
+                current = current.Next;
             }
-
-            Console.WriteLine("--- Stack Status ---");
-            for (int i = _top; i >= 0; i--)
-            {
-                Console.WriteLine($"| {_items[i]} |");
-            }
-            Console.WriteLine("------");
+            Console.WriteLine("NULL");
         }
+
     }
+
 }
