@@ -9,24 +9,17 @@ namespace DsaLearning
         {
             Console.WriteLine("Lets Goooooo!!!!");
 
-            LinkedList linkedlist = new LinkedList();
-            linkedlist.AddToEnd(10);
-            linkedlist.AddToEnd(20);
-            linkedlist.AddToEnd(30);
-            linkedlist.AddToEnd(40);
-
-            linkedlist.AddToBeginning(0);
-            linkedlist.AddToBeginning(-10);
-
+            LinkedStack linkedlist = new LinkedStack();
+            linkedlist.Push(10);
+            linkedlist.Push(20);
+            linkedlist.Push(30);
+            linkedlist.Push(40);
+            linkedlist.Push(50);
+            linkedlist.Push(60);
+            linkedlist.Push(70);
             linkedlist.Display();
-            Console.WriteLine();
-            
-            linkedlist.RemoveFirst();
 
-            linkedlist.Display();
-            Console.WriteLine();
-
-            linkedlist.RemoveLast();
+            linkedlist.Pop();
             linkedlist.Display();
         }
     }
@@ -45,92 +38,52 @@ namespace DsaLearning
     }
 
     // class to link the nodes
-    public class LinkedList
+    public class LinkedStack
     {
-        private Node _head; // holds the memory address of the first node
-        private Node _tail; // holds the memory address of the last node
+        private Node _top;
 
-        public void AddToEnd(int data) // method to add a node to the list
+        public void Push(int data)
         {
             Node newNode = new Node(data);
 
-            if (_head == null)
-            {
-                _head = newNode;
-                _tail = newNode;
-            } else
-            {
-                _tail.Next = newNode;
-                _tail = newNode;
-            }
+            newNode.Next = _top;
+            _top = newNode;
         }
 
-        public void AddToBeginning(int data)
+        public int Pop()
         {
-            Node newNode = new Node(data);
-
-            newNode.Next = _head;
-            _head = newNode;
-
-            if (_tail == null)
+            if (_top == null)
             {
-                _tail = newNode;
+                Console.WriteLine("Linked Stack is empty!");
+                return -1;
             }
+            
+            int poppedValue = _top.Data;
+            _top = _top.Next;
+            Console.WriteLine($"{poppedValue} has been popped!");
+
+            return poppedValue;
+            
         }
 
         public void Display()
         {
-            Node current = _head;
-
-            while (current != null)
+            if (_top == null)
             {
-                Console.WriteLine($"{current.Data}");
+                Console.WriteLine("Stack is empty!");
+                return;
+            }
+
+            Console.WriteLine("----Top of Stack----");
+
+            Node current = _top;
+
+            while(current != null)
+            {
+                Console.WriteLine($"\t{current.Data}");
                 current = current.Next;
             }
-            
-            Console.WriteLine("NULL");
-            
-        }
-
-        public void RemoveFirst()
-        {
-            if (_head != null)
-            {
-                _head = _head.Next;
-                if (_head == null)
-                {
-                    _tail = null;
-                }
-            } else
-            {
-                Console.WriteLine("List already Empty");
-            }
-        }
-
-        public void RemoveLast()
-        {
-            Node pointer = _head;
-
-            if (pointer == null)
-            {
-                Console.WriteLine("This list is already empty");
-            } else if (pointer.Next == null)
-            {
-                _head = null;
-                _tail = null;
-                Console.WriteLine("Cleared.");
-            } else
-            {
-                while (pointer.Next.Next != null) // pointer.Next != _tail also works
-                {
-                    pointer = pointer.Next;
-                }
-                pointer.Next = null;
-                _tail = pointer;
-                Console.WriteLine("Last node removed succesfully!");
-            }
-
-
+            Console.WriteLine("--------------------");
         }
 
 
