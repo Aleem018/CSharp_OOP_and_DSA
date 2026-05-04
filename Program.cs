@@ -1,4 +1,4 @@
-﻿// implementing a linked list from scratch on my own
+﻿// implementing a linked list queue from scratch on my own
 using System;
 
 namespace DsaLearning
@@ -9,18 +9,26 @@ namespace DsaLearning
         {
             Console.WriteLine("Lets Goooooo!!!!");
 
-            LinkedStack linkedlist = new LinkedStack();
-            linkedlist.Push(10);
-            linkedlist.Push(20);
-            linkedlist.Push(30);
-            linkedlist.Push(40);
-            linkedlist.Push(50);
-            linkedlist.Push(60);
-            linkedlist.Push(70);
-            linkedlist.Display();
+            LinkedQueue queue = new LinkedQueue();
+            queue.Enqueue(10);
+            queue.Display();
 
-            linkedlist.Pop();
-            linkedlist.Display();
+            queue.Enqueue(20);
+            queue.Display();
+            
+            queue.Enqueue(30);
+            queue.Display();
+
+            queue.Dequeue();
+            queue.Display();
+
+            queue.Dequeue();
+            queue.Display();
+
+            queue.Dequeue();
+            queue.Display();
+
+            queue.Dequeue();
         }
     }
 
@@ -38,54 +46,60 @@ namespace DsaLearning
     }
 
     // class to link the nodes
-    public class LinkedStack
+    public class LinkedQueue
     {
-        private Node _top;
+        private Node _head;
+        private Node _tail;
 
-        public void Push(int data)
+
+        public void Enqueue(int data)
         {
             Node newNode = new Node(data);
 
-            newNode.Next = _top;
-            _top = newNode;
+            if (_tail == null)
+            {
+                _tail = newNode;
+                _head = newNode;
+                return;
+            }
+            _tail.Next = newNode;
+            _tail = newNode;
         }
 
-        public int Pop()
+        public void Dequeue()
         {
-            if (_top == null)
+            if (_head == null)
             {
-                Console.WriteLine("Linked Stack is empty!");
-                return -1;
+                Console.WriteLine("The queue is empty!");
+                return;
             }
-            
-            int poppedValue = _top.Data;
-            _top = _top.Next;
-            Console.WriteLine($"{poppedValue} has been popped!");
 
-            return poppedValue;
-            
+            _head = _head.Next;
+
+            if (_head == null)
+            {
+                _tail = null;
+            }
         }
 
         public void Display()
         {
-            if (_top == null)
+            Node current = _head;
+
+            Console.Write("The state of the queue is: ");
+            if (current == null)
+                {
+                    Console.WriteLine("Empty");
+                    return;
+                }
+            while (current != null)
             {
-                Console.WriteLine("Stack is empty!");
-                return;
-            }
-
-            Console.WriteLine("----Top of Stack----");
-
-            Node current = _top;
-
-            while(current != null)
-            {
-                Console.WriteLine($"\t{current.Data}");
+                Console.Write($"{current.Data} ");
+                
                 current = current.Next;
             }
-            Console.WriteLine("--------------------");
+            
+            Console.WriteLine();
         }
-
-
     }
 }
