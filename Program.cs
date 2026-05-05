@@ -1,4 +1,4 @@
-﻿// implementing a linked list queue from scratch on my own
+﻿// implementing a doubly linked list from scratch
 using System;
 
 namespace DsaLearning
@@ -7,28 +7,28 @@ namespace DsaLearning
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Lets Goooooo!!!!");
+            Console.WriteLine("Lets Gooooo!");
 
-            LinkedQueue queue = new LinkedQueue();
-            queue.Enqueue(10);
-            queue.Display();
+            DoublyLinkedList Doubly = new DoublyLinkedList();
 
-            queue.Enqueue(20);
-            queue.Display();
-            
-            queue.Enqueue(30);
-            queue.Display();
+            Doubly.AddLast(20);
+            Doubly.AddLast(30);
+            Doubly.AddLast(40);
+            Doubly.Display();
 
-            queue.Dequeue();
-            queue.Display();
+            Doubly.AddToBeginning(10);
+            Doubly.Display();
 
-            queue.Dequeue();
-            queue.Display();
+            Doubly.RemoveLast();
+            Doubly.Display();
 
-            queue.Dequeue();
-            queue.Display();
+            Doubly.RemoveFromBeginning();
+            Doubly.Display();
 
-            queue.Dequeue();
+            Doubly.InsertAfter(20, 25);
+            Doubly.Display();
+
+
         }
     }
 
@@ -37,68 +37,148 @@ namespace DsaLearning
     {
         public int Data; //This contains the value
         public Node Next; // This contains the memory address of the next node
+        public Node Prev;
 
         public Node(int value)
         {
             Data = value;
             Next = null;
+            Prev = null;
         }
     }
 
     // class to link the nodes
-    public class LinkedQueue
+    public class DoublyLinkedList
     {
         private Node _head;
         private Node _tail;
 
-
-        public void Enqueue(int data)
+        public void AddLast(int data)
         {
             Node newNode = new Node(data);
 
-            if (_tail == null)
+            if (_head == null)
             {
-                _tail = newNode;
                 _head = newNode;
-                return;
+                _tail = newNode;
             }
-            _tail.Next = newNode;
-            _tail = newNode;
+            else
+            {
+                _tail.Next = newNode;
+                newNode.Prev = _tail;
+                _tail = newNode;
+            }
         }
 
-        public void Dequeue()
+        public void RemoveLast()
         {
             if (_head == null)
             {
-                Console.WriteLine("The queue is empty!");
-                return;
+                Console.WriteLine("The list is empty!");
             }
+            else if (_head == _tail)
+            {
+                _head = null;
+                _tail = null;
+            }
+            else
+            {
+                _tail = _tail.Prev;
+                _tail.Next = null;
+            }
+        }
 
-            _head = _head.Next;
+        public void AddToBeginning(int data)
+        {
+            Node newNode = new Node(data);
 
             if (_head == null)
             {
-                _tail = null;
+                _head = newNode;
+                _tail = newNode;
+            }
+            else
+            {
+                _head.Prev = newNode;
+                newNode.Next = _head;
+                _head = newNode;
             }
         }
+
+        public void RemoveFromBeginning()
+        {
+            if (_head == null)
+            {
+                Console.WriteLine("The list is empty!");
+
+            }
+            else if (_head == _tail)
+            {
+                _head = null;
+                _tail = null;
+            }
+            else
+            {
+                _head = _head.Next;
+                _head.Prev = null;
+            }
+
+        }
+
+        // To insert a node in the middle of the list...
+        public void InsertAfter(int targetData, int data)
+        {
+            Node current = _head;
+            while (current != null)
+            {
+                if (current.Data == targetData)
+                {
+                    Node newNode = new Node(data);
+
+                    newNode.Next = current.Next;
+                    newNode.Prev = current;
+
+                    if (current.Next == null)
+                    {
+                        current.Next = newNode;
+                        _tail = newNode;
+                        return;
+                    }
+                    else
+                    {
+                        current.Next.Prev = newNode;
+                    }
+
+                    current.Next = newNode;
+                    return;
+                }
+                current = current.Next;
+            }
+            return;
+
+        }
+
+        // To find the position where to insert the node
+
+
 
         public void Display()
         {
             Node current = _head;
 
-            Console.Write("The state of the queue is: ");
+            Console.Write("The state of the doubly linkedlist is: ");
             if (current == null)
-                {
-                    Console.WriteLine("Empty");
-                    return;
-                }
+            {
+                Console.WriteLine("Empty");
+                return;
+            }
             while (current != null)
             {
                 Console.Write($"{current.Data} ");
-                
+
                 current = current.Next;
             }
-            
+
             Console.WriteLine();
         }
     }
