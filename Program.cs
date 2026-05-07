@@ -1,4 +1,4 @@
-﻿// implementing a doubly linked list from scratch
+﻿// implementing a binary search tree
 using System;
 
 namespace DsaLearning
@@ -7,179 +7,182 @@ namespace DsaLearning
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Lets Gooooo!");
+            BinarySearchTree BST = new BinarySearchTree();
 
-            DoublyLinkedList Doubly = new DoublyLinkedList();
+            BST.InsertNode(2);
+            BST.InsertNode(4);
+            BST.InsertNode(8);
+            BST.InsertNode(6);
+            BST.InsertNode(14);
+            BST.InsertNode(12);
+            BST.InsertNode(10);
+            BST.InsertNode(16);
 
-            Doubly.AddLast(20);
-            Doubly.AddLast(30);
-            Doubly.AddLast(40);
-            Doubly.Display();
+            BST.Display();
 
-            Doubly.AddToBeginning(10);
-            Doubly.Display();
+            Console.WriteLine(BST.Contains(14));
+            Console.WriteLine(BST.Contains(24));
+            Console.WriteLine(BST.Contains(4));
 
-            Doubly.RemoveLast();
-            Doubly.Display();
+            BST.Delete(14);
 
-            Doubly.RemoveFromBeginning();
-            Doubly.Display();
-
-            Doubly.InsertAfter(20, 25);
-            Doubly.Display();
-
-
+            BST.Display();
         }
     }
 
     // class for node creation
-    public class Node
+    public class TreeNode
     {
         public int Data; //This contains the value
-        public Node Next; // This contains the memory address of the next node
-        public Node Prev;
+        public TreeNode Left; // This contains the memory address of the next node
+        public TreeNode Right;
 
-        public Node(int value)
+        public TreeNode(int value)
         {
             Data = value;
-            Next = null;
-            Prev = null;
+            Left = null;
+            Right = null;
         }
     }
 
-    // class to link the nodes
-    public class DoublyLinkedList
+    public class BinarySearchTree
     {
-        private Node _head;
-        private Node _tail;
+        public TreeNode _root;
 
-        public void AddLast(int data)
+        public void InsertNode(int data)
         {
-            Node newNode = new Node(data);
+            TreeNode newNode = new TreeNode(data);
 
-            if (_head == null)
+            if (_root == null)
             {
-                _head = newNode;
-                _tail = newNode;
-            }
-            else
-            {
-                _tail.Next = newNode;
-                newNode.Prev = _tail;
-                _tail = newNode;
-            }
-        }
-
-        public void RemoveLast()
-        {
-            if (_head == null)
-            {
-                Console.WriteLine("The list is empty!");
-            }
-            else if (_head == _tail)
-            {
-                _head = null;
-                _tail = null;
-            }
-            else
-            {
-                _tail = _tail.Prev;
-                _tail.Next = null;
-            }
-        }
-
-        public void AddToBeginning(int data)
-        {
-            Node newNode = new Node(data);
-
-            if (_head == null)
-            {
-                _head = newNode;
-                _tail = newNode;
-            }
-            else
-            {
-                _head.Prev = newNode;
-                newNode.Next = _head;
-                _head = newNode;
-            }
-        }
-
-        public void RemoveFromBeginning()
-        {
-            if (_head == null)
-            {
-                Console.WriteLine("The list is empty!");
-
-            }
-            else if (_head == _tail)
-            {
-                _head = null;
-                _tail = null;
-            }
-            else
-            {
-                _head = _head.Next;
-                _head.Prev = null;
+                _root = newNode;
+                return;
             }
 
-        }
+            TreeNode current = _root;
 
-        // To insert a node in the middle of the list...
-        public void InsertAfter(int targetData, int data)
-        {
-            Node current = _head;
             while (current != null)
             {
-                if (current.Data == targetData)
+                if (newNode.Data < current.Data)
                 {
-                    Node newNode = new Node(data);
-
-                    newNode.Next = current.Next;
-                    newNode.Prev = current;
-
-                    if (current.Next == null)
+                    if (current.Left == null)
                     {
-                        current.Next = newNode;
-                        _tail = newNode;
+                        current.Left = newNode;
                         return;
-                    }
-                    else
+                    } else
                     {
-                        current.Next.Prev = newNode;
+                        current = current.Left;
                     }
-
-                    current.Next = newNode;
+                } else if (newNode.Data > current.Data)
+                {
+                    if (current.Right == null)
+                    {
+                        current.Right = newNode;
+                        return;
+                    } else
+                    {
+                        current = current.Right;
+                    }
+                } else
+                {
+                    Console.WriteLine($"{data} is already in the tree");
                     return;
                 }
-                current = current.Next;
+
             }
-            return;
-
         }
-
-        // To find the position where to insert the node
-
-
 
         public void Display()
         {
-            Node current = _head;
-
-            Console.Write("The state of the doubly linkedlist is: ");
-            if (current == null)
-            {
-                Console.WriteLine("Empty");
-                return;
-            }
-            while (current != null)
-            {
-                Console.Write($"{current.Data} ");
-
-                current = current.Next;
-            }
-
+            Console.Write("Tree values in order: ");
+            PrintInOrder(_root);
             Console.WriteLine();
         }
+
+        private void PrintInOrder(TreeNode node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            PrintInOrder(node.Left);
+            
+            Console.Write($"{node.Data} ");
+
+            PrintInOrder(node.Right);
+        }
+
+        // a method to search for a particular number in the BST
+        public bool Contains(int data)
+        {
+            TreeNode current = _root;
+
+            while (current != null)
+            {
+                if (current.Data == data)
+                {
+                    return true;
+                } else if (current.Data < data)
+                {
+                    current = current.Right;
+                } else if (current.Data > data)
+                {
+                    current = current.Left;
+                }
+            }
+            return false;
+            
+        }
+
+        public void Delete(int data)
+        {
+            _root = DeleteNode(_root, data);
+
+        }
+
+        private TreeNode DeleteNode(TreeNode current, int target)
+        {
+            if (current == null)
+            {
+                return current;
+            }
+
+            if (target < current.Data)
+            {
+                current.Left = DeleteNode(current.Left, target);
+            } else if (target > current.Data)
+            {
+                current.Right = DeleteNode(current.Right, target);
+            } else
+            {
+                if (current.Left == null)
+                {
+                    return current.Right;
+                } else if (current.Right == null)
+                {
+                    return current.Left;
+                } else
+                {
+                    int stuntDoubleValue = FindMin(current.Right);
+                    current.Data = stuntDoubleValue;
+                    current.Right = DeleteNode(current.Right, stuntDoubleValue);
+                }
+
+            }
+            return current;
+        }
+
+        private int FindMin(TreeNode node)
+        {
+            TreeNode current = node;
+            while (current.Left != null)
+            {
+                current = current.Left;
+            }
+            return current.Data;
+        }
+
     }
+
 }
